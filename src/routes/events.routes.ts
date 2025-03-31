@@ -1,7 +1,7 @@
 import { IncomingMessage, ServerResponse } from "http";
 import { events, findEventById } from '../data/events.data';
 
-export const hadelEventRoute = (req: IncomingMessage, res: ServerResponse) => {
+export const handleEventRoute = (req: IncomingMessage, res: ServerResponse) => {
     if (req.method === 'GET' && req.url === '/events') {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(events));
