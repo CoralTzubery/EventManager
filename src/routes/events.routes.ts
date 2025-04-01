@@ -37,7 +37,36 @@ export const handleEventRoute = (req: IncomingMessage, res: ServerResponse) => {
                 res.end(JSON.stringify(newEvent));
             } catch (error) {
                 res.writeHead(404, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify( { message: 'Not a right JSON format'}));
+                res.end(JSON.stringify( { message: 'Not a right JSON format' }));
+            }
+        });
+    }
+
+    else if (req.method === 'PUT' && req.url?.startsWith('/events/')) {
+        const id = parseInt(req.url.split('/')[2]);
+        const eventtIndex = events.findIndex(event => event.id === id);
+
+        if (eventtIndex === -1) {
+            res.writeHead(404, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ message: 'Event was not found' }));
+            return;
+        }
+
+        let body = '';
+
+        req.on('data', chunk => {
+            body += chunk.toString();
+        });
+
+        req.on('end', () => {
+            try {
+                const updatedData: Partial<Event> = JSON.parse(body);
+                events[eventtIndex] = { ...events[eventtIndex], ...updatedData };
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify(events[eventtIndex]));
+            } catch (error) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ message: 'Not a right JSON format' }));
             }
         });
     }
