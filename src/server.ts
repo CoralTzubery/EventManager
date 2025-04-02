@@ -1,12 +1,12 @@
 import * as http from 'http';
 import { connectDB } from './config/database';
-import { handleEventRoute } from './routes/events.routes';
+import { handleEventsRoute } from './routes/events.routes';
 
 connectDB();
 
 const server = http.createServer((req, res) => {
     if (req.url?.startsWith('/events')) {
-        handleEventRoute(req, res);
+        handleEventsRoute(req, res);
     } else {
         res.writeHead(404, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify( { message: 'Route not found' }));
