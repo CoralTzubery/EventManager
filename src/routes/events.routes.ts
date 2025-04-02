@@ -71,6 +71,21 @@ export const handleEventRoute = (req: IncomingMessage, res: ServerResponse) => {
         });
     }
 
+    else if (req.method === 'DELETE' && req.url?.startsWith('/events/')) {
+        const id = parseInt(req.url.split('/')[2]);
+        const eventtIndex = events.findIndex(event => event.id ===id);
+
+        if (eventtIndex === -1) {
+            res.writeHead(404, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify( { message: 'Event was not found' }));
+            return;
+        }
+
+        events.splice(eventtIndex, 1);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify( {message: 'Event deleted successfully'}));
+    }
+
     else {
         res.writeHead(404, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ message: 'Event was not found'}));
