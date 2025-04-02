@@ -1,5 +1,8 @@
 import * as http from 'http';
+import { connectDB } from './config/database';
 import { handleEventRoute } from './routes/events.routes';
+
+connectDB();
 
 const server = http.createServer((req, res) => {
     if (req.url?.startsWith('/events')) {
